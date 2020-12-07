@@ -13,50 +13,53 @@ def get_node(id)
 end
 
 STDIN.read.split("\n").each do |line|
-  splitted = line.split(" bags contain ")
-  parent = splitted[0]
-  parent_node = get_node(parent)
+  parent, *children = line.split(/ bags contain no other bags\.| bags contain | bags?, | bags\./)
+  parent_node = get_node parent
 
-  splitted[1].split(", ").each do |str|
-    if str != "no other bags." then
-      splitted = str.split(" ")
-      qty = splitted[0].to_i
-      child = splitted[1..2].join(" ")
-      child_node = get_node(child)
+  children.each do |str|
+    match = str.match(/(?<qty>\d+) (?<id>\w+ \w+)/)
+    child_node = get_node match[:id]
 
-      child_node[:parents].append(parent_node)
-      parent_node[:children][child] = {
-        :id => child,
-        :qty => qty,
-        :node => child_node
-      }
-    end
+    child_node[:parents].append parent_node
+    parent_node[:children][match[:id]] = {
+      :id => match[:id],
+      :qty => match[:qty].to_i,
+      :node => child_node
+    }
   end
 end
 
-def find_parents(arr, child)
-  parents = child[:parents]
+def find_parents(child_id)
+  def helper(arr, child)
+    parents = child[:parents]
 
-  parents.each do |parent|
-    arr.append(parent[:id])
-    find_parents(arr, parent)
+    parents.each do |parent|
+      arr.append parent[:id]
+      helper arr, parent
+    end
+
+    return arr
   end
 
-  return arr
+  return helper([], get_node(child_id)).uniq!.length
 end
 
 def count_children(parent)
-  children = parent[:children]
+  def helper(parent)
+    children = parent[:children]
 
-  total = 0
+    total = 0
 
-  children.each do |_, child|
-    total += child[:qty]
-    total += child[:qty] * count_children(child[:node])
+    children.each do |_, child|
+      total += child[:qty]
+      total += child[:qty] * helper(child[:node])
+    end
+
+    return total
   end
 
-  return total
+  return helper get_node "shiny gold"
 end
 
-puts find_parents([], get_node("shiny gold")).uniq!.length
-puts count_children(get_node("shiny gold"))
+puts find_parents "shiny gold"
+puts count_children "shiny gold"
