@@ -35,28 +35,28 @@ STDIN.read.split("\n").each do |line|
 end
 
 def find_parents(arr, child)
-  parents = get_node(child)[:parents]
+  parents = child[:parents]
 
   parents.each do |parent|
     arr.append(parent[:id])
-    find_parents(arr, parent[:id])
+    find_parents(arr, parent)
   end
 
   return arr
 end
 
 def count_children(parent)
-  children = get_node(parent)[:children]
+  children = parent[:children]
 
   total = 0
 
   children.each do |_, child|
     total += child[:qty]
-    total += child[:qty] * count_children(child[:id])
+    total += child[:qty] * count_children(child[:node])
   end
 
   return total
 end
 
-puts find_parents([], "shiny gold").uniq!.length
-puts count_children("shiny gold")
+puts find_parents([], get_node("shiny gold")).uniq!.length
+puts count_children(get_node("shiny gold"))
