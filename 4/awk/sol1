@@ -1,0 +1,4 @@
+#!/usr/bin/env -S gawk -f
+BEGIN { RS = "\n\n"; COUNT = 0 }
+/byr/ && /iyr/ && /eyr/ && /hgt/ && /ecl/ && /hcl/ && /pid/ { COUNT += 1 }
+END { print COUNT }

@@ -1,0 +1,7 @@
+#!/bin/bash
+# Collapse newlines \
+  tr '\n' '\r' | sed -E 's/(\S)\r/\1 /g' | tr '\r' '\n' | \
+# Filter passpors w/ all fields (excl. cid) \
+  grep ecl | grep hgt | grep hcl | grep pid | grep iyr | grep byr | grep eyr | \
+# Count matching passports \
+  wc -l

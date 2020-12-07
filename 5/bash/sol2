@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "ibase=2;`tr 'BFRL' '1010'`" | bc | sort -n | perl -e 'while(<>){$a=$b;$b=$c;print $_, " ", $_-$b, " ", $b-$a}'

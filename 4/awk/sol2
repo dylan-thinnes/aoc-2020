@@ -1,0 +1,33 @@
+#!/usr/bin/env -S gawk -f
+BEGIN {
+    RS = "\n\n"
+    FS = "[\n :]"
+    COUNT = 0
+}
+
+{
+    delete r
+    for (i = 1; i < NF; i += 2)
+        r[$i] = $(i+1)
+}
+
+NF >= 14 && \
+r["byr"] >= 1920 && r["byr"] <= 2002 && \
+r["iyr"] >= 2010 && r["iyr"] <= 2020 && \
+r["eyr"] >= 2020 && r["eyr"] <= 2030 && \
+( \
+    r["hgt"] ~ "cm" && 0 + r["hgt"] >= 150 && 0 + r["hgt"] <= 193 \
+    ||
+    r["hgt"] ~ "in" && 0 + r["hgt"] >= 59 && 0 + r["hgt"] <= 76 \
+) && \
+r["ecl"] ~ /^(amb|blu|brn|gry|grn|hzl|oth)$/ && \
+r["hcl"] ~ /^#[0-9a-f]{6}$/                             && \
+r["pid"] ~ /^[0-9]{9}$/                                 && \
+1 {
+    COUNT += 1
+    print r["pid"]
+}
+
+END {
+    print COUNT
+}

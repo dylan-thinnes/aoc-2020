@@ -1,0 +1,22 @@
+#!/bin/bash
+DAT=$(find . -mindepth 2 -maxdepth 2 -type d)
+MAX_DAY=$(echo "$DAT" | cut -d'/' -f2 | sort -nr | head -n1)
+LANGS=$(echo "$DAT" | cut -d'/' -f3 | sort | uniq)
+LONGEST_LANG=$(echo "$LANGS" | awk '{print length}' | sort -nr | head -n1)
+
+printf "%-${LONGEST_LANG}s " ""
+echo `seq 1 $MAX_DAY`
+
+for lang in $LANGS; do
+    printf "%-${LONGEST_LANG}s " $lang
+    for day in `seq 1 $MAX_DAY`; do
+        if [[ 1 -eq $(($day % 2)) ]]; then echo -ne '\e[40m'; fi
+
+        (echo "$DAT" | grep "$day/$lang" >/dev/null) \
+            && echo -n "X " \
+            || echo -n "  "
+
+        if [[ 1 -eq $(($day % 2)) ]]; then echo -ne '\e[0m'; fi
+    done
+    echo
+done

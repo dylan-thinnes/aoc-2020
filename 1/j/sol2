@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+echo """
+a =: `cat | tr '\n' ' '`
+`cat j/sol2.j`
+""" | ijconsole
