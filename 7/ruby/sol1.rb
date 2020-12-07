@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 $dict = {}
 
 def get_node(id)
