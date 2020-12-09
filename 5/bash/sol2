@@ -1,2 +1,8 @@
 #!/bin/bash
-echo "ibase=2;`tr 'BFRL' '1010'`" | bc | sort -n | perl -e 'while(<>){$a=$b;$b=$c;print $_, " ", $_-$b, " ", $b-$a}'
+
+pre=""
+
+(echo "ibase=2;"; tr 'BFRL' '1010') | bc | sort -n | while read n; do
+    [[ $((n - pre)) = "2" ]] && echo $((n - 1))
+    pre=$n
+done
