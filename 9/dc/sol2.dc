@@ -1,0 +1,83 @@
+# Search value
+#127sz
+167829540sz
+
+# Printing utils
+[d [=======] ps_ps_]sP
+[[=======] f s_]sQ
+[[=======] ps_]sR
+[dn [ ]n]sS
+[[]ps_]sT
+
+# Guarded runners
+[[z0 !=B]sA]sW # Stack must be nonempty
+[[Li d1-Si 0<B]sA]sI # i must be nonzero
+
+# Read in all numbers from stdin
+[0?d0!=B]sA
+[rs_lAx]sB
+lAxs_
+
+# Save numbers count to *h*eight
+zsh
+
+# Reverse stack into correct order, onto *e*nd
+lWx
+[Se lAx]sB
+lAx
+
+# Lose a value to the FRONT
+[
+    [FRONT: ]n
+    lz lSx s_
+
+    z R lSx # Retrieve bottom of stack
+    dlz+sz # Update target
+    Sf # Store to front
+
+    lz lSx s_
+    lTx
+]sF
+
+# Gain a value from the END
+[
+    [END: ]n
+    lz lSx s_
+
+    Le lSx
+    dlzr-sz # Update target
+
+    lz lSx s_
+    lTx
+]sE
+
+lIx
+[
+    [LOOP]ps_
+    lz lPx s_
+    lQx
+    lzsy
+    0 ly <F
+    0 ly >E
+    0 lz !=A
+]SB
+lh lPx si
+lAx
+
+lQx
+
+lIx
+[
+    [dsn]SC
+    [dsm]SD
+    d ln <C
+    d ln >D
+
+    Sa
+    lAx
+    La
+]SB
+zsi
+lAx
+
+ln lm + ps_

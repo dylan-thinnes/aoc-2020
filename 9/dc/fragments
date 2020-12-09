@@ -1,0 +1,54 @@
+## Iterate: pop ToS, add to rest
+#lFx
+#[
+#    sc # Save top of stack
+#
+#    lFx # Internal loop
+#    [
+#        d lc + # Add (former) top of stack to element
+#        Sd # Store into d
+#        _4R # Cycle 4 elements
+#
+#        lAx
+#    ]SB
+#    4Si
+#    lAx
+#    Lis_ LBs_ # Clear inner loop body & counter
+#
+#    lc # Uncycle 4 elements
+#
+#    _5R # Cycle all 5 elements
+#    lAx
+#]sB
+#5Si
+#lAx
+#
+#lQx # DIAG PRINT
+#
+## Clear stack, load and print preamble (register d)
+#lFx
+#[
+#    Ld
+#    lAx
+#    lSx
+#    Sd
+#]sB
+#20si
+#lRx
+#lAx
+#lTx
+#
+### Cycle through "rest of stack", comparing against preamble (registers e, f)
+##lFx
+##[
+##    Lfsn
+##
+##    lFx
+##    [
+##        LddSc
+##        lAx
+##        LcSd
+##    ]SB
+##    20Si
+##]sB
+##lfsi

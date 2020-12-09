@@ -1,0 +1,165 @@
+# Preamble length
+25sz
+
+# Printing utils
+[d [=======] ps_ps_]sP
+[[=======] f s_]sQ
+[[=======] ps_]sR
+[dn [ ]n]sS
+[[]ps_]sT
+
+# Guarded runners
+[[z0 !=B]sA]sW # Stack must be nonempty
+[[Li d1-Si 0<B]sA]sF # i must be nonzero
+
+# Read in all numbers from stdin
+[0?d0!=B]sA
+[rs_lAx]sB
+lAxs_
+
+# Reverse stack into correct order
+lWx
+[Sc lAx LcdSd]sB # Duplicate stack same-way-round onto d
+lAx
+[s_ lAx Ld]sB    # Overwrite main stack with flipped d
+lAx
+
+lQx # DIAG PRINT
+
+# Pop first z values into d
+lFx
+[Sd lAx]sB
+lzSi
+lAx
+
+lQx # DIAG PRINT
+
+# Store rest into e, store length into f
+zsf
+lWx
+[Sc lAx LcSe]sB # Duplicate stack same-way-round onto e
+lAx
+
+lQx # DIAG PRINT
+
+# Add preamble to itself, elementwise, to create preamble (register d).
+lFx # Load first z values back out of d
+[Ld lAx]sB
+lzSi
+lAx
+
+lQx # DIAG PRINT
+
+dSh
+lFx
+[
+    Sh
+    lFx
+    [
+        d St lh + Sp lAx Lt
+    ]SB
+    liSi
+    lAx
+    LBs_ Lis_
+
+    lAx
+
+    Lhs_
+]sB
+lzSi
+lAx
+
+lFx
+[
+    Lp
+    lAx
+]sB
+lz 1-dd*+2/ lPx si
+lAx
+
+lh lPx s_
+
+lQx # DIAG PRINT
+
+# Add a new element to tail
+[
+    dlh-sg # Save new head for later
+    lFx
+    [
+        # Calculate element
+        lRx
+        lSx lh lSx - lSx le lSx + lSx
+        lTx
+
+        # Calculate swap position, print too
+        lRx
+        lz 2- dd*+2/ lSx
+        li 1- lSx dd*+2/ lSx
+        - lSx
+        lz 1- + lSx
+        lTx
+
+        # Rotate element into swap position
+        0r-R
+
+        lAx
+    ]SB
+    lz 1- Si
+    lAx
+    LBs_ Lis_
+
+    lgsh
+
+    [NEW HEAD:]ps_
+    lh lPx s_
+]sX
+
+# Check element is in tail
+[
+    0sv
+    [
+        [FOUND!]ps_
+        1sv
+        Lis_ 0Si
+    ]sV
+
+    lFx
+    [
+        Sc
+        lAx
+        lRx Lc d lSx le lSx lTx =V
+    ]SB
+    lz 1- dd*+2/Si
+    lAx
+    LBs_ Lis_
+
+    0 lv =W
+]sY
+
+# Exit program
+[
+    [Found: ]n
+    le ps_
+    1000Q
+]sW
+
+# Run search over all inputs
+lFx
+[
+    [STACK:]ps_
+    [HEIGHT]ps_
+    zps_
+    lQx
+    lYx
+    [HEIGHT]ps_
+    zps_
+    lXx
+    [HEIGHT]ps_
+    zps_
+    Les_
+    lAx
+]SB
+
+[STARTING!]ps_
+lf lPx si
+lAx
