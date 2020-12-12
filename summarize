@@ -12,7 +12,7 @@ echo
 for lang in $LANGS; do
     printf "%-${LONGEST_LANG}s " $lang
     echo -n "|"
-    for day in `seq 1 $MAX_DAY`; do
+    for day in `seq -w 1 $MAX_DAY`; do
         (echo "$DAT" | grep "/$day/$lang" >/dev/null) \
             && echo -n "X|" \
             || echo -n " |"
