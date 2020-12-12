@@ -4,7 +4,7 @@ MAX_DAY=$(echo "$DAT" | cut -d'/' -f2 | sort -nr | head -n1)
 LANGS=$(echo "$DAT" | cut -d'/' -f3 | sort | uniq | grep -v utils)
 LONGEST_LANG=$(echo "$LANGS" | awk '{print length}' | sort -nr | head -n1)
 
-printf "%-${LONGEST_LANG}s |0|0|0|0|0|0|0|0|0|1|1|1|1|1|1|1|1|1|1|2|2|2|2|2|2|" "" | head -c$((LONGEST_LANG + MAX_DAY*2 + 2))
+printf "%-${LONGEST_LANG}s |0|0|0|0|0|0|0|0|0|1|1|1|1|1|1|1|1|1|1|2|2|2|2|2|2|" "" | head -c$((LONGEST_LANG + MAX_DAY*2 + 2)) | tr '0' ' '
 echo
 printf "%-${LONGEST_LANG}s |1|2|3|4|5|6|7|8|9|0|1|2|3|4|5|6|7|8|9|0|1|2|3|4|5|" "" | head -c$((LONGEST_LANG + MAX_DAY*2 + 2))
 echo
