@@ -1,0 +1,17 @@
+#!/usr/bin/env octave
+inp = input("")
+seats = inp
+active = repmat(0, size(inp))
+
+while (true)
+    convoluted = conv2(active, [1,1,1;1,1,1;1,1,1], "same");
+    empty_to_occ = seats & (convoluted == 0) & ~active;
+    occ_to_empty = seats & (convoluted < 5) & active;
+    res = empty_to_occ | occ_to_empty;
+    if (res == active)
+        break
+    end
+    active = res;
+end
+
+sum(sum(active))

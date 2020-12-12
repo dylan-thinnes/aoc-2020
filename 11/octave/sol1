@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+(
+    echo -n "["
+    cat | sed -E 's/./\0, /g' | tr 'L.\n' '10;'
+    echo -n "]"
+) | ./octave/sol1.octave

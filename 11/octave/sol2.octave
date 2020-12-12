@@ -1,0 +1,53 @@
+#!/usr/bin/env octave
+inp = input("");
+seats = inp;
+active = zeros(size(inp));
+
+dim = size(active)(1);
+kernel_width = dim * 2 - 1;
+
+pows = 2 .^ abs([1:dim-1,0,1-dim:-1]);
+kernel_diag = pows .* eye(kernel_width);
+kernel_hori = pows .* circshift(prepad(ones(1, [kernel_width]), kernel_width, 0, 1), dim);
+kernel_vert = transpose(kernel_hori);
+
+kernel_n  = triu(kernel_vert);
+kernel_n  = kernel_n .* ~eye(kernel_width);
+kernel_w  = rot90(kernel_n);
+kernel_s  = rot90(kernel_w);
+kernel_e  = rot90(kernel_s);
+
+kernel_ne = triu(rot90(kernel_diag));
+kernel_ne = kernel_ne .* ~eye(kernel_width);
+kernel_nw = rot90(kernel_ne);
+kernel_sw = rot90(kernel_nw);
+kernel_se = rot90(kernel_sw);
+
+ii = 0
+while (true)
+    ii += 1
+    negs = (active * 2 - 1) .* seats;
+
+    convoluted_n = conv2(negs, kernel_n, "same") > 0;
+    convoluted_e = conv2(negs, kernel_e, "same") > 0;
+    convoluted_s = conv2(negs, kernel_s, "same") > 0;
+    convoluted_w = conv2(negs, kernel_w, "same") > 0;
+
+    convoluted_ne = conv2(negs, kernel_ne, "same") > 0;
+    convoluted_se = conv2(negs, kernel_se, "same") > 0;
+    convoluted_sw = conv2(negs, kernel_sw, "same") > 0;
+    convoluted_nw = conv2(negs, kernel_nw, "same") > 0;
+
+    convoluted = convoluted_n + convoluted_e + convoluted_s + convoluted_w + convoluted_ne + convoluted_se + convoluted_sw + convoluted_nw;
+
+    empty_to_occ = seats & (convoluted == 0) & ~active;
+    occ_to_empty = seats & (convoluted <= 4) & active;
+    res = empty_to_occ | occ_to_empty;
+
+    if (res == active)
+        break
+    end
+    active = res;
+end
+
+sum(sum(active))
