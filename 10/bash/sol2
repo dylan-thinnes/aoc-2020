@@ -1,11 +1,16 @@
 #!/bin/bash
-prev=0
-(
-    sort -n | \
-    while read line; do
-        echo $line $prev $((line - prev)); prev=$line;
-    done | cut -d' ' -f3
-    echo 3
-) | uniq -c | grep "1$" | cut -d' ' -f7 | \
-    sed -E 's/1/1/;s/2/2/;s/4/7/;s/3/4/;s/5/13/' | \
-    tr '\n' '*' | sed -E 's/.$/\n/' | bc
+# Create temporary fifo
+fifo=$(mktemp -u)
+mkfifo $fifo
+
+sort -n | # Sort adapters \
+tee $fifo | # Save output to fifo \
+(echo 0; head -n-1) | # Prepend 0, remove last\
+paste $fifo - | # Zip together with orig output, from fifo \
+tr '\t' '-' | bc | # Subtract previous from current \
+uniq -c | grep "1$" | cut -d' ' -f7 | # Only keep runs of 1 \
+sed -E 's/1/1/;s/2/2/;s/4/7/;s/3/4/;s/5/13/' | # Replace runs with their tribonacci permutations \
+tr '\n' '*' | sed -E 's/.$/\n/' | bc # Multiply permutations
+
+# Remove fifo
+rm $fifo
