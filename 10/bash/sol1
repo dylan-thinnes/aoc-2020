@@ -4,10 +4,9 @@ RES=$(
     sort -n | \
         while read line; do
             echo $line $prev $((line - prev)); prev=$line;
-        done #| cut -d' ' -f3
-        #echo 3
+        done | cut -d' ' -f3
+        echo 3
 )
-echo "$RES"
-#o=$(echo "$RES" | grep -c 1)
-#t=$(echo "$RES" | grep -c 3)
-#echo $((o * t))
+o=$(echo "$RES" | grep -c 1)
+t=$(echo "$RES" | grep -c 3)
+echo $((o * t))

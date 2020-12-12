@@ -1,0 +1,11 @@
+#!/bin/bash
+prev=0
+(
+    sort -n | \
+    while read line; do
+        echo $line $prev $((line - prev)); prev=$line;
+    done | cut -d' ' -f3
+    echo 3
+) | uniq -c | grep "1$" | cut -d' ' -f7 | \
+    sed -E 's/1/1/;s/2/2/;s/4/7/;s/3/4/;s/5/13/' | \
+    tr '\n' '*' | sed -E 's/.$/\n/' | bc
