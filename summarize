@@ -1,21 +1,21 @@
 #!/bin/bash
 DAT=$(find . -mindepth 2 -maxdepth 2 -type d | grep -E '^./[[:digit:]]+/')
 MAX_DAY=$(echo "$DAT" | cut -d'/' -f2 | sort -nr | head -n1)
-LANGS=$(echo "$DAT" | cut -d'/' -f3 | sort | uniq)
+LANGS=$(echo "$DAT" | cut -d'/' -f3 | sort | uniq | grep -v utils)
 LONGEST_LANG=$(echo "$LANGS" | awk '{print length}' | sort -nr | head -n1)
 
-printf "%-${LONGEST_LANG}s " ""
-echo -n "| "
-echo -n `seq 1 $MAX_DAY` | sed -E 's/[0-9 ]{2}/\0| /g'
-echo " |"
+printf "%-${LONGEST_LANG}s |0|0|0|0|0|0|0|0|0|1|1|1|1|1|1|1|1|1|1|2|2|2|2|2|2|" "" | head -c$((LONGEST_LANG + MAX_DAY*2 + 2))
+echo
+printf "%-${LONGEST_LANG}s |1|2|3|4|5|6|7|8|9|0|1|2|3|4|5|6|7|8|9|0|1|2|3|4|5|" "" | head -c$((LONGEST_LANG + MAX_DAY*2 + 2))
+echo
 
 for lang in $LANGS; do
     printf "%-${LONGEST_LANG}s " $lang
-    echo -n "| "
+    echo -n "|"
     for day in `seq 1 $MAX_DAY`; do
-        (echo "$DAT" | grep "$day/$lang" >/dev/null) \
-            && echo -n "X " \
-            || echo -n "  "
-    done | sed -E 's/[X ] /\0| /g'
+        (echo "$DAT" | grep "/$day/$lang" >/dev/null) \
+            && echo -n "X|" \
+            || echo -n " |"
+    done
     echo
 done
