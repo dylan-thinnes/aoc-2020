@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+(
+    echo -n """let types = $PWD/dhall/types.dhall
+    in
+    ["""
+    sed -E 's/^([NSEW])([0-9]+)$/{ op = types.Op.C types.Compass.\1, distance = \2 }/' \
+        | sed -E 's/^([FRL])([0-9]+)$/{ op = types.Op.\1, distance = \2 }/' \
+        | tr '\n' ',' \
+        | head -c-1
+    echo -n "]"
+) | dhall --explain --file ./dhall/sol1.dhall
