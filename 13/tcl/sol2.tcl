@@ -31,10 +31,6 @@ foreach xbus $xbuses {
     set prod [expr $prod * $xbus]
 }
 
-#set buses [list 27 20]
-#set offsets [list 15 16]
-#set prod [expr 27 * 20]
-
 puts $buses
 puts $offsets
 puts $prod
@@ -43,8 +39,8 @@ set total 0
 lmap bus $buses offset $offsets {
     set ab [euclid $bus [expr $prod / $bus]]
 
-    set res [expr $offset * [lindex $ab 1] * $prod / $bus]
-    puts [list $offset * [lindex $ab 1] * $prod / $bus = $res]
+    set eq [list $offset * [lindex $ab 1] * $prod / $bus]
+    puts [list {*}$eq = [set res [expr $eq]]]
     set total [expr $total + $res]
 }
 
