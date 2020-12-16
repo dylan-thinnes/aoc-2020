@@ -3,24 +3,41 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 class Sol1 {
+    public static void main (String [] args) {
+        Scanner scanner = new Scanner(System.in).useDelimiter(",|$");
+        History history = new History();
+
+        try {
+            while (true) {
+                history.insert(scanner.nextInt());
+            }
+        } catch (java.util.InputMismatchException e) {}
+
+        while (history.step < 2020) {
+            history.next();
+        }
+
+        System.out.println(history.lastInt.key);
+    }
+
     public static class History {
         class Entry {
             protected Integer key;
-            protected boolean firstTime;
+            protected int stage;
             private int last1;
             private int last2;
 
-            Entry (Integer key, int last1) {
+            Entry (Integer key) {
                 this.key = key;
-                this.last1 = last1;
+                this.last1 = 0;
                 this.last2 = 0;
-                this.firstTime = true;
+                this.stage = 0;
             }
 
             public Entry touch (int last1) {
                 this.last2 = this.last1;
                 this.last1 = last1;
-                this.firstTime = false;
+                this.stage++;
                 return this;
             }
 
@@ -44,7 +61,7 @@ class Sol1 {
         }
 
         public void next () {
-            if (this.lastInt.firstTime) {
+            if (this.lastInt.stage < 2) {
                 this.save(0);
             } else {
                 this.save(this.lastInt.diff());
@@ -52,35 +69,12 @@ class Sol1 {
         }
 
         public void save (int val) {
-            Entry entry = this.history.get(val);
-
-            if (entry == null) {
-                entry = new Entry(val, this.step);
-                this.history.put(val, entry);
-            } else {
-                entry.touch(this.step);
-            }
+            Entry entry = this.history.getOrDefault(val, new Entry(val));
+            entry.touch(this.step);
+            this.history.putIfAbsent(val, entry);
 
             this.lastInt = entry;
             this.step++;
         }
-    }
-
-    public static void main (String [] args) {
-        Scanner scanner = new Scanner(System.in).useDelimiter(",|$");
-        History history = new History();
-
-        try {
-            while (true) {
-                history.insert(scanner.nextInt());
-            }
-        } catch (java.util.InputMismatchException e) {
-        }
-
-        while (history.step < 2020) {
-            history.next();
-        }
-
-        System.out.println(history.lastInt.key);
     }
 }
