@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nix eval -f nix/sol1.nix --argstr input "`cat`" result
